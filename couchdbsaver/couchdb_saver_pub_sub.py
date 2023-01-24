@@ -3,6 +3,7 @@ import json
 from time import sleep
 from datetime import datetime
 from typing import Any, Dict
+from jsonschema import validate
 
 import couchdb
 import schedule
@@ -18,6 +19,10 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         self.to_save_topic = to_save_topic
         self.device_ip = device_ip
 
+        with open('couchdb_saver.schema') as fp:
+            self.schema = fp.read()
+
+
         self.connect_client()
         sleep(1)
         self.publish_registration("CouchDB Saver Registration")
@@ -26,6 +31,10 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         self: Any, _client: mqtt.Client, _userdata: Dict[Any, Any], msg: Any
     ) -> None:
         payload_json_str = json.loads(str(msg.payload.decode("utf-8")))
+        try:
+            validate(instance=payload_json_str, schema=self.schema)
+        except jsonschema.exceptions.ValidationError as err:
+            print(err)
         couch = couchdb.Server(f"http://admin:PASSWORD@{self.device_ip}:5984/")
         database = (
             couch.create("aisonobuoy")

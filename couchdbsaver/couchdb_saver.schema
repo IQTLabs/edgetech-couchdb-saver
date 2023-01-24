@@ -1,0 +1,55 @@
+{
+   "$schema":"http://json-schema.org/draft-04/schema#",
+   "title":"Message",
+   "description":"CouchDB schema for MQTT JSON messages",
+   "type":"object",
+   "properties":{
+      "PushTimestamp":{
+         "description":"The timestamp at which the message was pushed from device",
+         "type":"float"
+      },
+      "DeviceType":{
+         "description":"This can be either 'Collector' or 'Detector'",
+         "type":"string"
+      },
+      "ID":{
+         "descrption":"ID of the device. This should remain constant.",
+         "type":"string"
+      },
+      "DeploymentID":{
+         "description":"Deployment ID for device.<Project>-<City>-ID ",
+         "type":"string"
+      },
+      "CurrentLocation":{
+         "description":"Can be set to null/blank if no GPS present. Attribute is required",
+         "type":"string"
+      },
+      "Status":{
+         "description":"Values can be - [ Active, Deactive, Debug,]",
+         "type":"string"
+      },
+      "MessageType":{
+         "description":"Values can be - [ Heartbeat, Event,]",
+         "type":"string"
+      },
+      "ModelVersion":{
+         "description":"Version string representing the model running on device",
+         "type":"string"
+      },
+      "FirmwareVersion":{
+         "description":"Device firmware version",
+         "type":"string"
+      }
+   },
+   "required":[
+      "PushTimestamp",
+      "DeviceType",
+      "ID",
+      "DeploymentID",
+      "CurrentLocation",
+      "Status",
+      "MessageType",
+      "ModelVersion",
+      "FirmwareVersion"
+   ]
+}
