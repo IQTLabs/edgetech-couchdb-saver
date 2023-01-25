@@ -39,6 +39,10 @@
       "FirmwareVersion":{
          "description":"Device firmware version",
          "type":"string"
+      },
+      "DataPayloadType": {
+        "description": "The type of data payload, ex. AIS, Telemetry"
+        "type":"string"
       }
    },
    "required":[
@@ -50,6 +54,7 @@
       "Status",
       "MessageType",
       "ModelVersion",
-      "FirmwareVersion"
+      "FirmwareVersion",
+      "DataPayloadType"
    ]
 }
