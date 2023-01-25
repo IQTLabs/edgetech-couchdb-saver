@@ -34,7 +34,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         try:
             validate(instance=payload_json_str, schema=self.schema)
         except jsonschema.exceptions.ValidationError as err:
-            print(err)
+            self.publish_to_topic('/AISonobuoy/<HOSTNAME>/couchdbsaver/couchdb/errstring', err)
         couch = couchdb.Server(f"http://admin:PASSWORD@{self.device_ip}:5984/")
         database = (
             couch.create("aisonobuoy")

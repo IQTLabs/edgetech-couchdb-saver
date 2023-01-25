@@ -6,14 +6,14 @@
    "properties":{
       "PushTimestamp":{
          "description":"The timestamp at which the message was pushed from device",
-         "type":"float"
+         "type":"int"
       },
       "DeviceType":{
          "description":"This can be either 'Collector' or 'Detector'",
          "type":"string"
       },
       "ID":{
-         "descrption":"ID of the device. This should remain constant.",
+         "descrption":"ID of the device. This could be IP address. This should remain constant.",
          "type":"string"
       },
       "DeploymentID":{
