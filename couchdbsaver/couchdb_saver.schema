@@ -6,7 +6,7 @@
    "properties":{
       "PushTimestamp":{
          "description":"The timestamp at which the message was pushed from device",
-         "type":"int"
+         "type":"string"
       },
       "DeviceType":{
          "description":"This can be either 'Collector' or 'Detector'",
@@ -39,10 +39,6 @@
       "FirmwareVersion":{
          "description":"Device firmware version",
          "type":"string"
-      },
-      "DataPayloadType": {
-        "description": "The type of data payload, ex. AIS, Telemetry"
-        "type":"string"
       }
    },
    "required":[
@@ -54,7 +50,6 @@
       "Status",
       "MessageType",
       "ModelVersion",
-      "FirmwareVersion",
-      "DataPayloadType"
+      "FirmwareVersion"
    ]
 }
