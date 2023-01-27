@@ -16,7 +16,14 @@ services:
       context: ../edgetech-couchdb-saver/couchdbsaver
       dockerfile: ./Dockerfile
     environment:
-      - TO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - SENSOR_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/AIS/edgetech-daisy/bytestring
+      - TELEMETRY_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/telemetry/telemetry/string
+      - AUDIO_SAVE_TOPIC=/AISonobuoy/<HOSTNAME>/Audio/edgetech-audio-recorder/string
+      - COUCHDB_ERROR_TOPIC=/AISonobuoy/<HOSTNAME>/couchdbsaver/couchdb/errstring
+      - MQTT_IP=mqtt
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}\
       - DEVICE_IP=${DEVICE_IP}
     volumes:
       - /home/mobian/sensor-data:/sensor-data
