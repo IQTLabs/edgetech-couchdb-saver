@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "couchdb-saver"
+version = "0.1.0"
+description = "MQTT client that subscribes that writes data recieved from topics to a local CouchDB database"
+authors = ["arichadda <ari.chadda@gmail.com>"]
+license = "Apache 2.0"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+schedule = "^1.1.0"
+CouchDB = "^1.2"
+jsonschema = "^4.7.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
