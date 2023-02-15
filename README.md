@@ -86,6 +86,7 @@ flowchart TD
 style mqtt fill:#0072bc,color:#ffffff
 style couchdbsaver fill:#F9D308,color:#ffffff
 style telemetrydata fill:#80c342,color:#ffffff
+style audiofilename fill:#80c342,color:#ffffff
 style sensordata fill:#80c342,color:#ffffff
 style couchdbstartup fill:#6657d3,color:#ffffff
 style couchdbserver fill:#6657d3,color:#ffffff
