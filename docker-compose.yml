@@ -23,7 +23,7 @@ services:
       - MQTT_IP=mqtt
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
-      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}\
+      - COUCHDB_SERVER_IP_ADDR=${COUCHDB_SERVER_IP_ADDR}
       - DEVICE_IP=${DEVICE_IP}
     volumes:
       - /home/mobian/sensor-data:/sensor-data
