@@ -76,7 +76,8 @@ As this system is meant to be spun up with MQTT topics you would like to write t
 flowchart TD
     telemetrydata(Telemetry Data) -- Telemetry Topic --> mqtt{MQTT}
     sensordata(Sensor Data) -- Sensor Topic --> mqtt{MQTT}
-    mqtt{MQTT} -- Subscribed to Telemetry Topic and Sensor Topic --> couchdbsaver(CouchDB Saver)
+    audiofilename(Audio File Name) -- Audio File Name --> mqtt{MQTT}
+    mqtt{MQTT} -- Subscribed to Telemetry Topic, Sensor Topic, and Audio File Name Topic --> couchdbsaver(CouchDB Saver)
     couchdbsaver(CouchDB Saver) -- Write to Database --> couchdbserver(CouchDB Server)
     couchdbstartup(CouchDB Startup) -- Initalized Connection --> couchdbserver(CouchDB Server)
     couchdbstartup(CouchDB Startup) -- Initalized Connection --> couchdbremote[Cloud-Hosted CouchDB Server]
