@@ -9,7 +9,7 @@ license = "Apache 2.0"
 python = "^3.11"
 schedule = "^1.1.0"
 CouchDB = "^1.2"
-jsonschema = "^4.7.2"
+jsonschema = "^4.17.3"
 
 [tool.poetry.dev-dependencies]
 
