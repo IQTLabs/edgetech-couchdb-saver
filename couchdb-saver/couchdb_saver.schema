@@ -13,7 +13,7 @@
          "type":"string"
       },
       "ID":{
-         "descrption":"ID of the device. This could be IP address. This should remain constant.",
+         "description":"ID of the device. This could be IP address. This should remain constant.",
          "type":"string"
       },
       "DeploymentID":{
@@ -25,7 +25,7 @@
          "type":"string"
       },
       "Status":{
-         "description":"Values can be - [ Active, Deactive, Debug,]",
+         "description":"Values can be - [ Active, Inactive, Debug,]",
          "type":"string"
       },
       "MessageType":{
