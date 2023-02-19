@@ -1,11 +1,13 @@
-"""_summary_
+"""This file contains the CouchDBSaverPubSub class which is a child class of BaseMQTTPubSub. 
+The CouchDBSaverPubSub creates an MQTT client that subscribes to data topics and saves them
+to a local running CouchDB sever.
 """
 import os
 import json
 from time import sleep
 from typing import Any, Dict
-import jsonschema
 
+import jsonschema
 import couchdb
 import schedule
 import paho.mqtt.client as mqtt
@@ -14,7 +16,7 @@ from base_mqtt_pub_sub import BaseMQTTPubSub
 
 
 class CouchDBSaverPubSub(BaseMQTTPubSub):
-    """This class creates a connection to the MQTT broker and suscribes to several topics and
+    """This class creates a connection to the MQTT broker and subscribes to several topics and
     saves their messages to the local CouchDB database.
 
     Args:
@@ -34,7 +36,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         debug: bool = False,
         **kwargs: Any,
     ) -> None:
-        """The CouchDBSaverPubSub takes MQTT topics to write data from and CouchDB authetication
+        """The CouchDBSaverPubSub takes MQTT topics to write data from and CouchDB authentication
         information to write data sent on topics to the local CouchDB database.
 
         Args:
@@ -79,10 +81,10 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         """Callback to write data sent on a topic to the local CouchDB database.
 
         Args:
-            _client (mqtt.Client): the MQTT client that was instatntiated in the constructor.
+            _client (mqtt.Client): the MQTT client that was instantiated in the constructor.
             _userdata (Dict[Any,Any]): data passed to the callback through the MQTT paho Client
-            class contructor or set later through user_data_set().
-            msg (Any): the recieved message over the subscribed channel that includes
+            class constructor or set later through user_data_set().
+            msg (Any): the received message over the subscribed channel that includes
             the topic name and payload after decoding. The messages here will include the
             sensor data to save.
         """
@@ -93,7 +95,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
             jsonschema.validate(instance=payload_json_str, schema=self.schema)
         except jsonschema.exceptions.ValidationError as err:
             if self.debug:
-                # send validaiton errors on CouchDB error topic
+                # send validation errors on CouchDB error topic
                 self.publish_to_topic(self.couchdb_error_topic, err)
 
         # connect to local CouchDB instance
@@ -115,7 +117,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
             self.publish_heartbeat, payload="CouchDB Saver Heartbeat"
         )
 
-        # subscribe to topics for datbase writing — callbacks are all the same
+        # subscribe to topics for database writing — callbacks are all the same
         self.add_subscribe_topics(
             [self.sensor_save_topic, self.telemetry_save_topic, self.audio_save_topic],
             [self._to_save_callback, self._to_save_callback, self._to_save_callback],

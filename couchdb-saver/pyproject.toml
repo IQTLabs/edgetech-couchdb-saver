@@ -2,7 +2,7 @@
 name = "couchdb-saver"
 version = "0.1.0"
 description = "MQTT client that subscribes that writes data recieved from topics to a local CouchDB database"
-authors = ["arichadda <ari.chadda@gmail.com>"]
+authors = ["Ari <achadda@iqt.org>", "Rob <rcaudill@iqt.org>", "Logan <lkunka@iqt.org>", "Mona <mgogia@iqt.org>", "Jon <jmeade@iqt.org>", "Mike <mchadwick@iqt.org>"]
 license = "Apache 2.0"
 
 [tool.poetry.dependencies]

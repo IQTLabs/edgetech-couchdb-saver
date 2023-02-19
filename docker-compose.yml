@@ -5,15 +5,16 @@ services:
     ports:
       - "1883:1883"
       - "9001:9001"
-    build:
-      context: ./mqtt
-      dockerfile: ./Dockerfile
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "10"
   couchdbsaver:
     image: iqtlabs/edgetech-couchdbsaver:latest
-    network_mode: "host"
     build:
-      context: ../edgetech-couchdb-saver/couchdbsaver
+      context: ./couchdb-saver
       dockerfile: ./Dockerfile
     volumes:
       - /home/mobian/sensor-data:/sensor-data
