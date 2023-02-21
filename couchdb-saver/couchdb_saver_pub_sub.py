@@ -137,9 +137,9 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
 
 if __name__ == "__main__":
     saver = CouchDBSaverPubSub(
-        sensor_save_topic=str(os.environ.get("SENSOR_SAVE_TOPIC")),
-        telemetry_save_topic=str(os.environ.get("TELEMETRY_SAVE_TOPIC")),
-        audio_save_topic=str(os.environ.get("AUDIO_SAVE_TOPIC")),
+        sensor_save_topic=str(os.environ.get("SENSOR_TOPIC")),
+        telemetry_save_topic=str(os.environ.get("TELEMETRY_TOPIC")),
+        audio_save_topic=str(os.environ.get("AUDIO_TOPIC")),
         couchdb_error_topic=str(os.environ.get("COUCHDB_ERROR_TOPIC")),
         couchdb_user=str(os.environ.get("COUCHDB_USER")),
         couchdb_password=str(os.environ.get("COUCHDB_PASSWORD")),

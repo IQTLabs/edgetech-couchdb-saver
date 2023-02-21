@@ -11,8 +11,8 @@ services:
       options:
         max-size: "10M"
         max-file: "10"
-  couchdbsaver:
-    image: iqtlabs/edgetech-couchdbsaver:latest
+  couchdb-saver:
+    image: iqtlabs/edgetech-couchdb-saver:latest
     build:
       context: ./couchdb-saver
       dockerfile: ./Dockerfile
