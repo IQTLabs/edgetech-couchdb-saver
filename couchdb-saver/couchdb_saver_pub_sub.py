@@ -11,6 +11,7 @@ import jsonschema
 import couchdb
 import schedule
 import paho.mqtt.client as mqtt
+import logging
 
 from base_mqtt_pub_sub import BaseMQTTPubSub
 
@@ -98,9 +99,10 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
             # validate payload JSON against JSON schema
             jsonschema.validate(instance=payload_json_str, schema=self.schema)
         except jsonschema.exceptions.ValidationError as err:
-            if self.debug:
-                # send validation errors on CouchDB error topic
-                self.publish_to_topic(self.couchdb_error_topic, err)
+            logging.warn(f"JSON validation failed for {payload_json_str}")
+            # if self.debug:
+            # send validation errors on CouchDB error topic
+            self.publish_to_topic(self.couchdb_error_topic, str(err))
 
         # connect to local CouchDB instance
         couch = couchdb.Server(
@@ -112,7 +114,8 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
             else couch[self.couchdb_database_name]
         )
         # write to DB
-        database.save(payload_json_str)
+        _id, _ = database.save(payload_json_str)
+        logging.info(f"Document inserted at {_id}")
 
     def main(self: Any) -> None:
         """Main loop and function that setup the heartbeat to keep the TCP/IP
