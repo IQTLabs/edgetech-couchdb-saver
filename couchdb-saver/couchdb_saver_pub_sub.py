@@ -4,6 +4,7 @@ to a local running CouchDB sever.
 """
 import os
 import json
+import logging
 from time import sleep
 from typing import Any, Dict
 
