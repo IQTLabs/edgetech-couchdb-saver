@@ -22,7 +22,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
     Args:
         BaseMQTTPubSub (BaseMQTTPubSub): parent class written in the EdgeTech Core module
     """
-
+    # TODO: Include HOSTNAME?
     def __init__(
         self: Any,
         sensor_save_topic: str,
@@ -74,6 +74,21 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         self.connect_client()
         sleep(1)
         self.publish_registration("CouchDB Saver Registration")
+
+        # Log configuration parameters
+        logging.info(
+            f"""CouchDBSaverPubSub initialized with parameters:
+    sensor_save_topic = {sensor_save_topic}
+    telemetry_save_topic = {telemetry_save_topic}
+    audio_save_topic = {audio_save_topic}
+    couchdb_error_topic = {couchdb_error_topic}
+    couchdb_user = {couchdb_user}
+    couchdb_password = {couchdb_password}
+    couchdb_server_ip = {couchdb_server_ip}
+    device_ip = {device_ip}
+    debug = {debug}
+            """
+        )
 
     def _to_save_callback(
         self: Any, _client: mqtt.Client, _userdata: Dict[Any, Any], msg: Any
@@ -137,14 +152,14 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
 
 if __name__ == "__main__":
     saver = CouchDBSaverPubSub(
-        sensor_save_topic=str(os.environ.get("SENSOR_TOPIC")),
-        telemetry_save_topic=str(os.environ.get("TELEMETRY_TOPIC")),
-        audio_save_topic=str(os.environ.get("AUDIO_TOPIC")),
+        mqtt_ip=str(os.environ.get("MQTT_IP")),
+        sensor_save_topic=str(os.environ.get("SENSOR_SAVE_TOPIC")),
+        telemetry_save_topic=str(os.environ.get("TELEMETRY_SAVE_TOPIC")),
+        audio_save_topic=str(os.environ.get("AUDIO_SAVE_TOPIC")),
         couchdb_error_topic=str(os.environ.get("COUCHDB_ERROR_TOPIC")),
         couchdb_user=str(os.environ.get("COUCHDB_USER")),
         couchdb_password=str(os.environ.get("COUCHDB_PASSWORD")),
         couchdb_server_ip=str(os.environ.get("COUCHDB_SERVER_IP_ADDR")),
         device_ip=str(os.environ.get("DEVICE_IP")),
-        mqtt_ip=str(os.environ.get("MQTT_IP")),
     )
     saver.main()
