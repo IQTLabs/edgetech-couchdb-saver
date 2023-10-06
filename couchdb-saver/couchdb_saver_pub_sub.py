@@ -35,6 +35,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         couchdb_server_ip: str,
         device_ip: str,
         debug: bool = False,
+        log_level: str = "INFO",
         **kwargs: Any,
     ) -> None:
         """The CouchDBSaverPubSub takes MQTT topics to write data from and CouchDB authentication
@@ -51,6 +52,8 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
             couchdb_user (str): the username for CouchDB authentication
             couchdb_password (str): the password for CouchDB authentication
             couchdb_server_ip (str): the IP address for couchDB authentication
+            log_level (str): One of 'NOTSET', 'DEBUG', 'INFO', 'WARN',
+            'WARNING', 'ERROR', 'FATAL', 'CRITICAL'
             device_ip (str): the IP of the current device
         """
         # to override any of the BaseMQTTPubSub attributes
@@ -66,6 +69,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         self.couchdb_server_ip = couchdb_server_ip
         self.device_ip = device_ip
         self.debug = debug
+        self.log_level = log_level
 
         # open schema file for validation
         with open("couchdb_saver.schema", "r", encoding="utf-8") as file_pointer:
@@ -88,6 +92,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
     couchdb_server_ip = {couchdb_server_ip}
     device_ip = {device_ip}
     debug = {debug}
+    log_level = {log_level}
             """
         )
 
