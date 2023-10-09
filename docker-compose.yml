@@ -16,15 +16,15 @@ services:
     build:
       context: ./couchdb-saver
       dockerfile: ./Dockerfile
+    restart: unless-stopped
     volumes:
       - /home/mobian/sensor-data:/sensor-data
-    restart: unless-stopped
-    depends_on: 
-      - mqtt
-    env_file:
-      - .env
     logging:
       driver: "json-file"
       options:
         max-size: "10M"
         max-file: "10"
+    depends_on: 
+      - mqtt
+    env_file:
+      - .env
