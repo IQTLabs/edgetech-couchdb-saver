@@ -23,6 +23,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
     Args:
         BaseMQTTPubSub (BaseMQTTPubSub): parent class written in the EdgeTech Core module
     """
+
     # TODO: Include HOSTNAME?
     def __init__(
         self: Any,
@@ -158,15 +159,15 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
 
 if __name__ == "__main__":
     saver = CouchDBSaverPubSub(
-        mqtt_ip=os.environ.get("MQTT_IP"),
-        sensor_save_topic=os.environ.get("SENSOR_SAVE_TOPIC"),
-        telemetry_save_topic=os.environ.get("TELEMETRY_SAVE_TOPIC"),
-        audio_save_topic=os.environ.get("AUDIO_SAVE_TOPIC"),
-        couchdb_error_topic=os.environ.get("COUCHDB_ERROR_TOPIC"),
-        couchdb_user=os.environ.get("COUCHDB_USER"),
-        couchdb_password=os.environ.get("COUCHDB_PASSWORD"),
-        couchdb_server_ip=os.environ.get("COUCHDB_SERVER_IP_ADDR"),
-        device_ip=os.environ.get("DEVICE_IP"),
-        log_level=os.environ.get("LOG_LEVEL")
+        mqtt_ip=str(os.environ.get("MQTT_IP")),
+        sensor_save_topic=str(os.environ.get("SENSOR_SAVE_TOPIC")),
+        telemetry_save_topic=str(os.environ.get("TELEMETRY_SAVE_TOPIC")),
+        audio_save_topic=str(os.environ.get("AUDIO_SAVE_TOPIC")),
+        couchdb_error_topic=str(os.environ.get("COUCHDB_ERROR_TOPIC")),
+        couchdb_user=str(os.environ.get("COUCHDB_USER")),
+        couchdb_password=str(os.environ.get("COUCHDB_PASSWORD")),
+        couchdb_server_ip=str(os.environ.get("COUCHDB_SERVER_IP_ADDR")),
+        device_ip=str(os.environ.get("DEVICE_IP")),
+        log_level=str(os.environ.get("LOG_LEVEL")),
     )
     saver.main()
