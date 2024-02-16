@@ -11,6 +11,7 @@ import jsonschema
 import couchdb
 import schedule
 import paho.mqtt.client as mqtt
+import logging
 
 from base_mqtt_pub_sub import BaseMQTTPubSub
 
@@ -27,11 +28,13 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         self: Any,
         sensor_save_topic: str,
         telemetry_save_topic: str,
-        audio_save_topic: str,
+        audio_base64_topic: str,
+        image_base64_topic: str,
         couchdb_error_topic: str,
         couchdb_user: str,
         couchdb_password: str,
         couchdb_server_ip: str,
+        couchdb_database_name: str,
         device_ip: str,
         debug: bool = False,
         **kwargs: Any,
@@ -44,7 +47,7 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
             data sent to the database
             telemetry_save_topic (str): the MQTT telemetry topic to subscribe to and
             write the data sent to the database
-            audio_save_topic (str): the MQTT audio file topic to subscribe to and write
+            audio_base64_topic (str): the MQTT audio file topic to subscribe to and write
             the data sent to the database
             couchdb_error_topic (str): the MQTT topic to broadcast any CouchDB errors onto
             couchdb_user (str): the username for CouchDB authentication
@@ -58,11 +61,13 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
         # assign constructor parameters to class attributes
         self.sensor_save_topic = sensor_save_topic
         self.telemetry_save_topic = telemetry_save_topic
-        self.audio_save_topic = audio_save_topic
+        self.audio_base64_topic = audio_base64_topic
+        self.image_base64_topic = image_base64_topic
         self.couchdb_error_topic = couchdb_error_topic
         self.couchdb_user = couchdb_user
         self.couchdb_password = couchdb_password
         self.couchdb_server_ip = couchdb_server_ip
+        self.couchdb_database_name = couchdb_database_name
         self.device_ip = device_ip
         self.debug = debug
 
@@ -94,19 +99,23 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
             # validate payload JSON against JSON schema
             jsonschema.validate(instance=payload_json_str, schema=self.schema)
         except jsonschema.exceptions.ValidationError as err:
-            if self.debug:
-                # send validation errors on CouchDB error topic
-                self.publish_to_topic(self.couchdb_error_topic, err)
+            logging.warn(f"JSON validation failed for {payload_json_str}")
+            # if self.debug:
+            # send validation errors on CouchDB error topic
+            self.publish_to_topic(self.couchdb_error_topic, str(err))
 
         # connect to local CouchDB instance
-        couch = couchdb.Server(f"http://admin:PASSWORD@{self.device_ip}:5984/")
+        couch = couchdb.Server(
+            f"http://{self.couchdb_user}:{self.couchdb_password}@{self.device_ip}:5984/"
+        )
         database = (
-            couch.create("aisonobuoy")
-            if "aisonobuoy" not in couch
-            else couch["aisonobuoy"]
+            couch.create(self.couchdb_database_name)
+            if self.couchdb_database_name not in couch
+            else couch[self.couchdb_database_name]
         )
         # write to DB
-        database.save(payload_json_str)
+        _id, _ = database.save(payload_json_str)
+        logging.info(f"Document inserted at {_id}")
 
     def main(self: Any) -> None:
         """Main loop and function that setup the heartbeat to keep the TCP/IP
@@ -119,9 +128,19 @@ class CouchDBSaverPubSub(BaseMQTTPubSub):
 
         # subscribe to topics for database writing — callbacks are all the same
         self.add_subscribe_topics(
-            [self.sensor_save_topic, self.telemetry_save_topic, self.audio_save_topic],
-            [self._to_save_callback, self._to_save_callback, self._to_save_callback],
-            [2, 2, 2],
+            [
+                self.sensor_save_topic,
+                self.telemetry_save_topic,
+                self.audio_base64_topic,
+                self.image_base64_topic,
+            ],
+            [
+                self._to_save_callback,
+                self._to_save_callback,
+                self._to_save_callback,
+                self._to_save_callback,
+            ],
+            [2, 2, 2, 2],
         )
 
         while True:
@@ -139,11 +158,13 @@ if __name__ == "__main__":
     saver = CouchDBSaverPubSub(
         sensor_save_topic=str(os.environ.get("SENSOR_TOPIC")),
         telemetry_save_topic=str(os.environ.get("TELEMETRY_TOPIC")),
-        audio_save_topic=str(os.environ.get("AUDIO_TOPIC")),
+        audio_base64_topic=str(os.environ.get("AUDIO_TOPIC")),
+        image_base64_topic=str(os.environ.get("IMAGE_TOPIC")),
         couchdb_error_topic=str(os.environ.get("COUCHDB_ERROR_TOPIC")),
         couchdb_user=str(os.environ.get("COUCHDB_USER")),
         couchdb_password=str(os.environ.get("COUCHDB_PASSWORD")),
         couchdb_server_ip=str(os.environ.get("COUCHDB_SERVER_IP_ADDR")),
+        couchdb_database_name=str(os.environ.get("COUCHDB_DATABASE_NAME")),
         device_ip=str(os.environ.get("DEVICE_IP")),
         mqtt_ip=str(os.environ.get("MQTT_IP")),
     )
